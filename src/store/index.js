@@ -7,8 +7,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: ls.getItem('user'),                    /*Vuex中填充状态信息*/
-    auth: ls.getItem('auth')                     /*添加 auth 来保存当前用户的登录状态*/
+    user : ls.getItem('user'),                    /*Vuex中填充状态信息*/
+    auth : ls.getItem('auth'),                    /*添加 auth 来保存当前用户的登录状态*/
+    token: ls.getItem('token')                    /*添加 auth 来保存当前用户的登录状态*/
   },
   mutations: {
 
@@ -20,7 +21,7 @@ export default new Vuex.Store({
      */
     UPDATE_USER(state, user) {
       state.user = user                                 /*改变 user 的值*/
-      ls.setItem('user', user)                   /*将改变后的值存入 localStorage*/
+      ls.setItem('user', user)                    /*将改变后的值存入 localStorage*/
     },
 
     /**
@@ -32,14 +33,27 @@ export default new Vuex.Store({
     UPDATE_AUTH(state, auth) {                          /*添加 UPDATE_AUTH 来更改当前用户的登录状态*/
       state.auth = auth
       ls.setItem('auth', auth)
+    },
+
+    /**
+     * 添加token的方法
+     * @param state
+     * @param token
+     * @constructor
+     */
+    UPDATE_TOKEN(state, token) {
+      state.token = token
+      ls.setItem('token', token)
     }
   },
   actions: {
-    login({commit}, user) {
-      if (user) {
-        commit('UPDATE_USER', user)                     /*更新用户信息*/
-        commit('UPDATE_AUTH', true)                     /*将状态改为已经登陆*/
+    login({commit}, data) {
+      if (data) {
+        commit('UPDATE_USER' , data.user)                /*更新用户信息*/
+        commit('UPDATE_TOKEN', data.token)              /*修改Token*/
+        commit('UPDATE_AUTH' , true)                     /*将状态改为已经登陆*/
       }
+
       router.push('/')                                  /*跳转到首页*/
     }
   },

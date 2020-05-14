@@ -27,8 +27,6 @@
 </template>
 
 <script>
-  import localStorage from "../../utils/localStorage";
-
   export default {
     name: "Login",
     data() {
@@ -62,19 +60,15 @@
 
             axios.post('/api/user/public/login', user)
               .then(response => {
+                /* 将登录的信息存储起来 */
                 if (response.data.code == 1) {
-                  alert(response.data.msg);
-                  /* 将登录的信息存储起来 */
-                  localStorage.setItem('user', response.data.data)
-                } else {
-                  alert(response.data.msg);
+                  this.$store.dispatch('login', response.data.data)
                 }
+                alert(response.data.msg);
               })
               .catch(error => {
 
               });
-
-
           }
         })
       },

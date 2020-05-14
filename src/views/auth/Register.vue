@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import localStorage from "../../utils/localStorage";
+  import router       from '../../router'                          /*引入路由*/
 
   export default {
     name: "Register",
@@ -73,19 +73,15 @@
 
             axios.post('/api/user/public/register', user)
               .then(response => {
-                if (response.data.code == 1) {
-                  alert(response.data.msg);
+                alert(response.data.msg);
 
-                  console.log(response.data.msg)
-                } else {
-                  alert(response.data.msg);
+                if (response.data.code == 1) {
+                  router.push('/auth/login')
                 }
               })
               .catch(error => {
 
               });
-
-            const localUser = localStorage.getItem('user')
 
           }
         })
