@@ -1,6 +1,11 @@
 <template>
   <div class="row">
     <div class="col-md-4 col-md-offset-4 floating-box">
+
+      <!--全局消息组件开始-->
+      <Message :show.sync="msgShow" :type="msgType" :msg="msg"/>
+      <!--全局消息组件结束-->
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">请登录</h3>
@@ -31,8 +36,11 @@
     name: "Login",
     data() {
       return {
-        username          : '',     /*用户名*/
-        password          : '',     /*密码*/
+        username : '',   /*用户名*/
+        password : '',   /*密码*/
+        msg      : '',   /*消息*/
+        msgType  : '',   /*消息类型*/
+        msgShow  : false /*是否显示消息，默认不显示*/
       }
     },
     beforeCreate() {
@@ -60,11 +68,12 @@
 
             axios.post('/api/user/public/login', user)
               .then(response => {
+                this.showMsg(response.data.msg);
+
                 /* 将登录的信息存储起来 */
                 if (response.data.code == 1) {
                   this.$store.dispatch('login', response.data.data)
                 }
-                alert(response.data.msg);
               })
               .catch(error => {
 
@@ -72,7 +81,15 @@
           }
         })
       },
+      showMsg(msg, type = 'warning') {
+        this.msg     = msg
+        this.msgType = type
+        this.msgShow = false
 
+        this.$nextTick(() => {
+          this.msgShow = true
+        })
+      }
     }
   }
 </script>

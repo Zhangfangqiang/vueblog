@@ -1,6 +1,11 @@
 <template>
   <div class="row">
     <div class="col-md-4 col-md-offset-4 floating-box">
+
+      <!--全局消息组件开始-->
+      <Message :show.sync="msgShow" :type="msgType" :msg="msg"/>
+      <!--全局消息组件结束-->
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">请注册</h3>
@@ -46,7 +51,10 @@
         username          : '',     /*用户名*/
         password          : '',     /*密码*/
         cpassword         : '',     /*确认密码*/
-        verification_code : ''      /*验证码*/
+        verification_code : '',     /*验证码*/
+        msg               : '',     /*消息*/
+        msgType           : '',     /*消息类型*/
+        msgShow           : false   /*是否显示消息，默认不显示*/
       }
     },
     beforeCreate() {
@@ -73,8 +81,9 @@
 
             axios.post('/api/user/public/register', user)
               .then(response => {
-                alert(response.data.msg);
+                this.showMsg(response.data.msg);
 
+                /* 如果注册成功跳转到登录页 */
                 if (response.data.code == 1) {
                   router.push('/auth/login')
                 }
@@ -82,7 +91,6 @@
               .catch(error => {
 
               });
-
           }
         })
       },
@@ -97,16 +105,28 @@
         }
         axios.post('/api/user/verification_code/sendRE',user)
           .then(response => {
-            if (response.data.code == 1) {
-              alert(response.data.msg);
-            } else {
-              alert(response.data.msg);
-            }
+            this.showMsg(response.data.msg);
+
           })
           .catch(error => {
 
           });
       },
+
+      /**
+       * 消息提示
+       * @param msg
+       * @param type
+       */
+      showMsg(msg, type = 'warning') {
+        this.msg = msg
+        this.msgType = type
+        this.msgShow = false
+
+        this.$nextTick(() => {
+          this.msgShow = true
+        })
+      }
     }
   }
 </script>

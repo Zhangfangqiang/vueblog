@@ -15,6 +15,20 @@ const router = new Router({
 })
 
 /**
+ * 路由前置 守卫
+ */
+router.beforeEach((to, from, next) => {
+  const auth = router.app.$options.store.state.auth
+
+  /*如果登录并且访问的路由中有auth字符就跳转到首页*/
+  if (auth && to.path.indexOf('/auth/') !== -1) {
+    next('/')
+  }
+
+  next()
+})
+
+/**
  * 设置出口和返回的数据
  */
 export default router

@@ -50,11 +50,16 @@ export default new Vuex.Store({
     login({commit}, data) {
       if (data) {
         commit('UPDATE_USER' , data.user)                /*更新用户信息*/
-        commit('UPDATE_TOKEN', data.token)              /*修改Token*/
+        commit('UPDATE_TOKEN', data.token)               /*修改Token*/
         commit('UPDATE_AUTH' , true)                     /*将状态改为已经登陆*/
       }
-
-      router.push('/')                                  /*跳转到首页*/
+      router.push('/')                                   /*跳转到首页*/
+    },
+    logout({ commit }) {
+      commit('UPDATE_USER' , null)                       /*更新用户信息*/
+      commit('UPDATE_TOKEN', null)                       /*修改Token*/
+      commit('UPDATE_AUTH', false)                       /*修改登录状态*/
+      router.push('/')
     }
   },
   modules: {

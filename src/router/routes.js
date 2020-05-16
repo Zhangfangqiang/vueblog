@@ -18,5 +18,9 @@ export default [
     path      : '/',
     name      : 'Index',
     component : () => import('@/views/page/Index')
+  },
+  {
+    path: '*',
+    redirect: '/'
   }
 ]
